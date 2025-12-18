@@ -71,38 +71,76 @@
 
 ## 部署到 GitHub Pages
 
-1. **安裝 gh-pages**
+### 快速部署步驟
+
+1. **推送代碼到 GitHub**
    ```bash
-   npm install --save-dev gh-pages
+   git add .
+   git commit -m "準備部署"
+   git push origin main
    ```
 
-2. **修改 package.json**
-
-   添加以下內容到 `package.json`：
-   ```json
-   {
-     "homepage": "https://<your-username>.github.io/<your-repo-name>",
-     "scripts": {
-       "predeploy": "npm run build",
-       "deploy": "gh-pages -d dist"
-     }
-   }
-   ```
-
-3. **修改 vite.config.ts**
-
-   添加 base 路徑：
-   ```typescript
-   export default defineConfig({
-     base: '/<your-repo-name>/',
-     // ... 其他配置
-   })
-   ```
-
-4. **部署**
+2. **部署到 GitHub Pages**
    ```bash
+   npm install
    npm run deploy
    ```
+
+3. **啟用 GitHub Pages**
+
+   前往您的 GitHub 儲存庫：
+   - Settings → Pages
+   - Source: 選擇 "Deploy from a branch"
+   - Branch: 選擇 `gh-pages` / `(root)`
+   - 點擊 "Save"
+
+4. **訪問您的應用**
+
+   部署完成後，應用將在以下網址運行：
+   ```
+   https://llaurraa.github.io/group10/
+   ```
+
+### 重要提示
+
+本應用使用 Google Gemini AI，但 **API Key 不能在前端應用中安全使用**。目前的實現方式會在瀏覽器中暴露 API Key。
+
+**建議的解決方案：**
+
+1. **僅用於展示** - 如果只是展示 UI，可以暫時使用受限的 API Key
+2. **添加後端服務** - 建議創建一個後端 API 來安全地調用 Gemini API
+3. **使用環境變數** - 在本地開發時使用 `.env.local` 文件
+
+### 本地開發注意事項
+
+在本地運行時，創建 `.env.local` 文件：
+```bash
+cp .env.local.example .env.local
+```
+
+然後編輯 `.env.local`，添加您的 API Key。
+
+### 疑難排解
+
+**Q: 部署後頁面顯示空白？**
+
+A: 請確認：
+1. 在 vite.config.ts 中已設置正確的 `base: '/group10/'`
+2. 在 Settings → Pages 中選擇了 `gh-pages` 分支
+3. 等待 1-2 分鐘讓部署完成
+
+**Q: 占卜功能不工作？**
+
+A: 這是因為瀏覽器環境無法安全使用 API Key。建議：
+1. 創建後端 API 服務
+2. 或使用 Vercel/Netlify 等支援環境變數的部署平台
+
+**Q: npm run deploy 失敗？**
+
+A: 請確認：
+1. 已運行 `npm install` 安裝所有依賴
+2. Git 工作目錄是乾淨的（沒有未提交的更改）
+3. 有推送到 GitHub 的權限
 
 ## 環境變數說明
 
